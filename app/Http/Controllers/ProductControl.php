@@ -14,7 +14,7 @@ class ProductControl extends Controller
     public function index(): View
     {
         $products = Product::all();
-        return view('index', compact('products'));
+        return view('home', compact('products'));
     }
 
     /**
@@ -22,7 +22,7 @@ class ProductControl extends Controller
      */
     public function CreateProduct()
     {
-        return view('create'); //untuk menampilkan halaman add
+        return view('create');
     }
 
     /**
@@ -30,51 +30,52 @@ class ProductControl extends Controller
      */
     public function StoreProduct(Request $request)
     {
-//        $request->validate([
-//            'name' => 'required',
-//            'price' => 'required',
-//            'quantity' => 'required',
-//            'description' => 'required',
-//        ]);
+        $request->validate([
+            'NameProduct' => 'required',
+            'PriceProduct' => 'required',
+            'QuantityProduct' => 'required',
+            'DescriptionProduct' => 'required',
+        ]);
 
-        Request() -> NameProduct;
-        $request->NameProduk = $request->input('NameProduct');
-//        $request->PriceProduct = $request->input('PriceProduct');
-//        $request->QuantityProduct = $request->input('QuantityProduct');
-//        $request->DescriptionProduct = $request->input('DescriptionProduct');
+        Product::create([
+            "NameProduct" => $request->input('NameProduct'),
+            "PriceProduct" => $request->input('PriceProduct'),
+            "QuantityProduct" => $request->input('QuantityProduct'),
+            "DescriptionProduct" => $request->input('DescriptionProduct'),
+        ]);
 
-        dd($request->NameProduk = $request->input('NameProduct'));
+        return redirect('/product')->with("Pesan", "Berhasil ditambahkan data produk");
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $Product)
+    public function EditProduct(Product $product)
     {
-        //
+        return view('edit', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $Product)
+    public function DeleteProduct(Product $product_id)
     {
-        //
+        $product_id -> delete();
+        return redirect('/product')->with("Pesan", "Produk berhasil dihapus.");
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $Product)
+    public function UpdateProduct(Request $request, Product $Product)
     {
-        //
+        $request->validate([
+            'NameProduct' => 'required',
+            'PriceProduct' => 'required',
+            'QuantityProduct' => 'required',
+            'DescriptionProduct' => 'required',
+        ]);
+
+        $Product->update([
+            'NameProduct' => $request->input('NameProduct'),
+            'PriceProduct' => $request->input('PriceProduct'),
+            'QuantityProduct' => $request->input('QuantityProduct'),
+            'DescriptionProduct' => $request->input('DescriptionProduct'),
+        ]);
+
+        return redirect('/product')->with("Pesan", "Produk berhasil diupdate.");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $Product)
-    {
-        //
-    }
+
 }
